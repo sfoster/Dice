@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+		"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Dice</title>
+
+	<link rel="StyleSheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.5/dojo/resources/dojo.css"/>
+	<link rel="StyleSheet" href="./resources/dice.css"/>
+
+	<script>
+	(function(locn){
+		var qs = locn.search.substring(1), 
+			path = locn.pathname;
+		
+		djConfig = {
+			baseUrl: path.replace(/([\/\\])[^\/\\]*$/, "$1") + 'lib' + RegExp.$1, 
+			modulePaths: {
+				"dice": "dice"
+			}
+		};
+	})(location);
+	</script>
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/dojo/1.5/dojo/dojo.xd.js"></script>
+	
+	<script type="text/javascript">
+		dojo.require("dice");
+
+		dojo.ready(function(){
+			dice.init();
+		});
+	</script>
+</head>
+<body class="tundra">
+	<div id="toolbar">
+		<button id="roll1">Roll 1</button>
+		<button id="roll2">Roll Both</button>
+	</div>
+	<div id="die1" class="die"><img src="./resources/die.png"/></div>
+	<div id="die2" class="die"><img src="./resources/die.png"/></div>
+	
+	<audio src="./resources/rollingDice.ogg" id="sound" preload="true" controls="controls" style="display:none">
+		Your browser does not support the audio element.
+	</audio>
+</body>
+</html>
