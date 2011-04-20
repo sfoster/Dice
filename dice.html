@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+		"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Dojo (trunk)</title>
+
+	<link rel="StyleSheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.5/dojo/resources/dojo.css"/>
+	<style type="text/css">
+		.die {
+			width: 128px;
+			height: 128px;
+			position: absolute;
+			overflow: hidden;
+			top: 50%;
+			left: 50%;
+			margin-top: -64px;
+			margin-left: -64px;
+			border: 16px solid #900;
+			border-radius: 8px;
+		}
+		.die img {
+			position: absolute;
+			top: 0; left: 0;
+		}
+		#die1 {
+			left: 33%;
+			margin-top: -64px;
+			margin-left: -64px;
+		}
+		#die2 {
+			left: 66%;
+			margin-top: -64px;
+			margin-left: -64px;
+		}
+		#toolbar {
+			height: 100px;
+			background-color: rgba(255, 255, 255, 0.5);
+			text-align: center;
+		}
+		#toolbar button {
+			font-size: 3em;
+			padding: 11px 26px;
+			margin: 0.5em 1em;
+			border-radius: 8px;
+			border: 1px solid #333;
+		}
+		button#roll1 {
+			background-color: red;
+		}
+		button#roll2 {
+			background-color: yellow;
+		}
+		body {
+			background-color: #900;
+		}
+	</style>		
+
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/dojo/1.5/dojo/dojo.xd.js"></script>
+	
+	<script type="text/javascript">
+		dojo.require("dojo.fx");
+		
+		dojo.ready(function(){
+
+			function fadeEffect(node, posn) {
+				return dojo.animateProperty({
+					node: node,
+					delay: 100, 
+					duration: 1000,
+					properties: {
+						borderColor: { start: "#ffff00", end: "#990000"}
+					}
+				});
+			}
+			function rollDie() {
+				var anims = [];
+				dojo.forEach(arguments, function(nodeOrId){
+					var node = dojo.byId(nodeOrId);
+					var result = Math.floor(Math.random() * 6);
+					var posy = (-128 * result); // + "px";
+					anims.push( fadeEffect(node) );
+					console.log("animating to top: ", result);
+					anims.push( dojo.animateProperty({
+						node: node.firstChild,
+						duration: 200,
+						properties: {
+							top: posy
+						}
+						
+					}))
+				});
+				var anim = (anims.length > 1) ? 
+					dojo.fx.combine(anims) :
+					anims.pop();
+				
+				setTimeout(function(){
+					anim.play();
+				}, 1000);
+				dojo.byId('sound').play();
+			}
+			
+			function clickToRoll(evt) {
+				rollDie(evt.target);
+			}
+
+			dojo.forEach(["die1", "die2"], function(id){
+				dojo.connect(dojo.byId(id), "onclick", clickToRoll);
+			});
+			dojo.connect(dojo.byId("roll1"), "onclick", function(){ 
+				rollDie( dojo.byId("die1") );
+			});
+			dojo.connect(dojo.byId("roll2"), "onclick", function(){ 
+				rollDie( dojo.byId("die1"), dojo.byId("die2") );
+			});
+			dojo.connect(document, "keyup", function(evt){ 
+				console.log(evt.charCode, dojo.keys.ENTER);
+				if(evt.charCode == 49) { // #1
+					rollDie( dojo.byId("die1") );
+				} else if(
+					evt.charCode == 0 || 
+					evt.charCode == dojo.keys.ENTER || 
+					evt.charCode == dojo.keys.SPACE ||
+					evt.charCode == 50
+				){
+					rollDie( dojo.byId("die1"), dojo.byId("die2") );
+				}
+			});
+		});
+	</script>
+</head>
+<body class="tundra">
+	<div id="toolbar">
+		<button id="roll1">Roll 1</button>
+		<button id="roll2">Roll Both</button>
+	</div>
+	<div id="die1" class="die"><img src="./die.png"/></div>
+	<div id="die2" class="die"><img src="./die.png"/></div>
+	
+	<audio src="./rollingDice.ogg" id="sound" preload="true" controls="controls" style="display:none">
+		Your browser does not support the audio element.
+	</audio>
+</body>
+</html>
