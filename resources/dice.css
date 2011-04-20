@@ -1,0 +1,47 @@
+.die {
+	width: 128px;
+	height: 128px;
+	position: absolute;
+	overflow: hidden;
+	top: 50%;
+	left: 50%;
+	margin-top: -64px;
+	margin-left: -64px;
+	border: 16px solid #900;
+	border-radius: 8px;
+}
+.die img {
+	position: absolute;
+	top: 0; left: 0;
+}
+#die1 {
+	left: 33%;
+	margin-top: -64px;
+	margin-left: -64px;
+}
+#die2 {
+	left: 66%;
+	margin-top: -64px;
+	margin-left: -64px;
+}
+#toolbar {
+	height: 100px;
+	background-color: rgba(255, 255, 255, 0.5);
+	text-align: center;
+}
+#toolbar button {
+	font-size: 3em;
+	padding: 11px 26px;
+	margin: 0.5em 1em;
+	border-radius: 8px;
+	border: 1px solid #333;
+}
+button#roll1 {
+	background-color: red;
+}
+button#roll2 {
+	background-color: yellow;
+}
+body {
+	background-color: #900;
+}
